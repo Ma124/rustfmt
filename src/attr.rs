@@ -8,6 +8,7 @@ use self::doc_comment::DocCommentFormatter;
 use crate::comment::{contains_comment, rewrite_doc_comment, CommentStyle};
 use crate::config::lists::*;
 use crate::config::IndentStyle;
+use crate::config::ReorderDerives;
 use crate::expr::rewrite_literal;
 use crate::lists::{definitive_tactic, itemize_list, write_list, ListFormatting, Separator};
 use crate::overflow;
@@ -97,7 +98,7 @@ fn format_derive(
     context: &RewriteContext<'_>,
 ) -> Option<String> {
     // Collect all items from all attributes
-    let all_items = derives
+    let mut all_items = derives
         .iter()
         .map(|attr| {
             // Parse the derive items and extract the span for each item; if any
@@ -132,6 +133,18 @@ fn format_derive(
         .into_iter()
         .flatten()
         .collect::<Vec<_>>();
+
+    if matches!(
+        context.config.reorder_derives(),
+        ReorderDerives::Always
+    ) {
+        all_items.sort_by(|a, b| {
+            context.config.derive_order().compare(
+                a.item.as_deref(),
+                b.item.as_deref(),
+            )
+        });
+    }
 
     // Collect formatting parameters.
     let prefix = attr_prefix(&derives[0]);

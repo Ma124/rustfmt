@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::collections::{hash_set, HashSet};
 use std::fmt;
 use std::path::{Path, PathBuf};
@@ -292,7 +293,7 @@ impl WidthHeuristics {
     }
 }
 
-impl ::std::str::FromStr for WidthHeuristics {
+impl FromStr for WidthHeuristics {
     type Err = &'static str;
 
     fn from_str(_: &str) -> Result<Self, Self::Err> {
@@ -461,4 +462,80 @@ pub enum MatchArmLeadingPipe {
     Never,
     /// Preserve any existing leading pipes
     Preserve,
+}
+
+#[config_type]
+pub enum ReorderDerives {
+    Never,
+    Always,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq)]
+#[serde(transparent)]
+pub struct DeriveOrder(Vec<String>);
+
+impl DeriveOrder {
+    pub fn compare(&self, a: Option<&str>, b: Option<&str>) -> Ordering {
+        if self.0.is_empty() {
+            a.cmp(&b)
+        } else {
+            // TODO(Ma_124) optimize by constructing HashMap during parse
+
+            let mut ai = usize::MAX;
+            let mut bi = usize::MAX;
+
+            for (i, t) in self.0.iter().enumerate() {
+                if a == Some(t) {
+                    ai = i
+                }
+                if b == Some(t) {
+                    bi = i
+                }
+
+                if ai != usize::MAX && bi != usize::MAX {
+                    break;
+                }
+            }
+
+            ai.cmp(&bi)
+        }
+    }
+}
+
+impl Default for DeriveOrder {
+    fn default() -> Self {
+        Self(
+            [
+                "Error",
+                "Serialize",
+                "Deserialize",
+                "Copy",
+                "Clone",
+                "Eq",
+                "PartialEq",
+                "Ord",
+                "PartialOrd",
+                "Hash",
+                "Debug",
+                "Default",
+            ]
+            .iter()
+            .map(|s| s.to_string())
+            .collect(),
+        )
+    }
+}
+
+impl fmt::Display for DeriveOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "[{}]", self.0.iter().format(", "))
+    }
+}
+
+impl FromStr for DeriveOrder {
+    type Err = &'static str;
+
+    fn from_str(_: &str) -> Result<Self, Self::Err> {
+        Err("DeriveOrder is not parsable")
+    }
 }

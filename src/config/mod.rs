@@ -142,6 +142,8 @@ create_config! {
 
     // Options that can change the source code beyond whitespace/blocks (somewhat linty things)
     merge_derives: bool, true, true, "Merge multiple `#[derive(...)]` into a single one";
+    reorder_derives: ReorderDerives, ReorderDerives::Never, true, "Reoder inside `#[derive(...)]`";
+    derive_order: DeriveOrder, DeriveOrder::default(), true, "Order of derives";
     use_try_shorthand: bool, false, true, "Replace uses of the try! macro by the ? shorthand";
     use_field_init_shorthand: bool, false, true, "Use field initialization shorthand if possible";
     force_explicit_abi: bool, true, true, "Always print the abi for extern items";
