@@ -1,3 +1,35 @@
+# This fork
+Install by cloning and running:
+``` sh
+cargo install --path . --force
+```
+
+Enable derive reordering using the following `rustfmt.toml`:
+``` toml
+# Requires fork of rustfmt: https://github.com/Ma124/rustfmt
+#   Unlikely to get merged: #1867 (rustfmt), #154 (fmt-rfcs)
+reorder-derives = "Always"
+
+derive-order = [
+  "Error",
+  "Serialize",
+  "Deserialize",
+  "Default",
+  "Debug",
+  "Copy",
+  "Clone",
+  "Ord",
+  "PartialOrd",
+  "Eq",
+  "PartialEq",
+  "Hash",
+]
+```
+
+Prior Discussion:
+- [rustfmt #1867 (closed): "derive sorting"](https://github.com/rust-lang/rustfmt/issues/1867)
+- [fmt-rfcs #154 (closed): "Sort derives"](https://github.com/rust-dev-tools/fmt-rfcs/issues/154)
+
 # rustfmt [![Build Status](https://travis-ci.com/rust-lang/rustfmt.svg?branch=master)](https://travis-ci.com/rust-lang/rustfmt) [![Build Status](https://ci.appveyor.com/api/projects/status/github/rust-lang/rustfmt?svg=true)](https://ci.appveyor.com/project/rust-lang-libs/rustfmt) [![crates.io](https://img.shields.io/crates/v/rustfmt-nightly.svg)](https://crates.io/crates/rustfmt-nightly) [![Travis Configuration Status](https://img.shields.io/travis/davidalber/rustfmt-travis.svg?label=travis%20example)](https://travis-ci.org/davidalber/rustfmt-travis)
 
 A tool for formatting Rust code according to style guidelines.
