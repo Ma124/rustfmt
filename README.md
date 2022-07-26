@@ -8,9 +8,9 @@ Enable derive reordering using the following `rustfmt.toml`:
 ``` toml
 # Requires fork of rustfmt: https://github.com/Ma124/rustfmt
 #   Unlikely to get merged: #1867 (rustfmt), #154 (fmt-rfcs)
-reorder-derives = "Always"
+reorder_derives = "Always"
 
-derive-order = [
+derive_order = [
   "Error",
   "Serialize",
   "Deserialize",
