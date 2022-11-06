@@ -1,6 +1,6 @@
 # Configuring Rustfmt
 
-Rustfmt is designed to be very configurable. You can create a TOML file called `rustfmt.toml` or `.rustfmt.toml`, place it in the project or any other parent directory and it will apply the options in that file. If none of these directories contain such a file, both your home directory and a directory called `rustfmt` in your [global config directory](https://docs.rs/dirs/1.0.4/dirs/fn.config_dir.html) (e.g. `.config/rustfmt/`) are checked as well.
+Rustfmt is designed to be very configurable. You can create a TOML file called `rustfmt.toml` or `.rustfmt.toml`, place it in the project or any other parent directory and it will apply the options in that file. If none of these directories contain such a file, both your home directory and a directory called `rustfmt` in your [global config directory](https://docs.rs/dirs/4.0.0/dirs/fn.config_dir.html) (e.g. `.config/rustfmt/`) are checked as well.
 
 A possible content of `rustfmt.toml` or `.rustfmt.toml` might look like this:
 
@@ -1857,13 +1857,16 @@ pub enum Foo {}
 
 ## `imports_granularity`
 
-How imports should be grouped into `use` statements. Imports will be merged or split to the configured level of granularity.
+Controls how imports are structured in `use` statements. Imports will be merged or split to the configured level of granularity.
+
+Similar to other `import` related configuration options, this option operates within the bounds of user-defined groups of imports. See [`group_imports`](#group_imports) for more information on import groups.
+
+Note that rustfmt will not modify the granularity of imports containing comments if doing so could potentially lose or misplace said comments.
 
 - **Default value**: `Preserve`
 - **Possible values**: `Preserve`, `Crate`, `Module`, `Item`, `One`
 - **Stable**: No (tracking issue: [#4991](https://github.com/rust-lang/rustfmt/issues/4991))
 
-Note that rustfmt will not modify the granularity of imports containing comments if doing so could potentially lose or misplace said comments.
 
 #### `Preserve` (default):
 

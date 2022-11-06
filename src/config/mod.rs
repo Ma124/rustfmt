@@ -20,9 +20,11 @@ pub use crate::config::options::*;
 #[macro_use]
 pub(crate) mod config_type;
 #[macro_use]
+#[allow(unreachable_pub)]
 pub(crate) mod options;
 
 pub(crate) mod file_lines;
+#[allow(unreachable_pub)]
 pub(crate) mod lists;
 pub(crate) mod macro_names;
 
@@ -184,7 +186,7 @@ create_config! {
     make_backup: bool, false, false, "Backup changed files";
     print_misformatted_file_names: bool, false, true,
         "Prints the names of mismatched files that were formatted. Prints the names of \
-         files that would be formated when used with `--check` mode. ";
+         files that would be formatted when used with `--check` mode. ";
 }
 
 #[derive(Error, Debug)]
@@ -422,7 +424,7 @@ mod test {
         use rustfmt_config_proc_macro::config_type;
 
         #[config_type]
-        pub enum PartiallyUnstableOption {
+        pub(crate) enum PartiallyUnstableOption {
             V1,
             V2,
             #[unstable_variant]
