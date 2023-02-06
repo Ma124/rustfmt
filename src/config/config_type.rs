@@ -6,7 +6,7 @@ use crate::config::DeriveOrder;
 /// Trait for types that can be used in `Config`.
 pub(crate) trait ConfigType: Sized {
     /// Returns hint text for use in `Config::print_docs()`. For enum types, this is a
-    /// pipe-separated list of variants; for other types it returns "<type>".
+    /// pipe-separated list of variants; for other types it returns `<type>`.
     fn doc_hint() -> String;
 
     /// Return `true` if the variant (i.e. value of this type) is stable.
